@@ -1,0 +1,40 @@
+﻿@using GoogleRecaptcha.Validation
+@using System.Web.Configuration
+
+@model GoogleRecaptcha.Models.Comment
+
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    <div>
+        @Html.LabelFor(m => m.Title)
+        @Html.TextBoxFor(m => m.Title)
+    </div>
+
+    <div>
+        @Html.LabelFor(m => m.Content)
+        @Html.TextBoxFor(m => m.Content)
+    </div>
+
+    <div>
+        @Html.GoogleReCaptcha(WebConfigurationManager.AppSettings["ClientKey"].ToString())
+    </div>
+
+    <div>
+        <button type="submit">Send comment</button>
+    </div>
+
+    if (!ViewData.ModelState.IsValid)
+    {
+        <ul>
+            @foreach (var modelState in ViewData.ModelState.Values)
+            {
+                foreach (var error in modelState.Errors)
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            }
+        </ul>
+    }
+}
